@@ -4,29 +4,8 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:views="clr-namespace:PlantCareMobile.Views"
        Title="PlantCareMobile"
-       >
-
-    <Shell.Resources>
-        <Style TargetType="FlyoutItem"
-               BasedOn="{StaticResource BaseStyle}">
-            <Setter Property="Shell.BackgroundColor"
-                    Value="#101928" />
-            <Setter Property="Shell.ForegroundColor"
-                    Value="White" />
-            <Setter Property="Shell.TitleColor"
-                    Value="White" />
-            <Style.Triggers>
-                <Trigger TargetType="FlyoutItem"
-                         Property="IsChecked"
-                         Value="True">
-                    <Setter Property="Shell.ForegroundColor"
-                            Value="#05DF73" />
-                    <Setter Property="Shell.TitleColor"
-                            Value="#05DF73" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Shell.Resources>
+       Shell.ForegroundColor="#05DF73"
+       Shell.TitleColor="#05DF73">
 
     <Shell.FlyoutHeader>
         <Grid HeightRequest="120"
@@ -50,6 +29,7 @@
 
     <!--PAGINA INICIAL-->
     <ShellContent ContentTemplate="{DataTemplate views:WelcomePage}"
+                  Route="WelcomePage"
                   Shell.FlyoutItemIsVisible="False"
                   Shell.FlyoutBehavior="Disabled"
                   Shell.NavBarIsVisible="False" />

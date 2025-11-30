@@ -9,7 +9,6 @@ namespace PlantCareMobile
             InitializeComponent();
             Routing.RegisterRoute("LoginPage", typeof(LoginPage));
             Routing.RegisterRoute("RegisterPage", typeof(RegisterPage));
-            Routing.RegisterRoute("HomePage", typeof(HomePage));
         }
     }
 }
