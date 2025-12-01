@@ -23,7 +23,6 @@
                                   FontFamily="RobotoVar"
                                   FontAttributes="Bold"
                                   FontSize="28" />
-                            <!--PENDIENTE: Enlazar el nombre del usuario logeado-->
                             <Span Text=" 🗣️🔥"
                                   FontFamily="RobotoVar"
                                   FontAttributes="Bold"
@@ -67,6 +66,11 @@
                             BackgroundColor="Transparent"
                             HeightRequest="150"
                             Padding="20">
+
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnUploadAreaTapped" />
+                        </Border.GestureRecognizers>
+
                         <VerticalStackLayout VerticalOptions="Center"
                                              HorizontalOptions="Center"
                                              Spacing="10">
@@ -85,15 +89,34 @@
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
+
                             <Label Text="PNG, JPG, GIF hasta 10MB"
                                    TextColor="#6B7280"
                                    FontSize="12"
                                    HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
                     </Border>
+
+                    <!-- 🔄 LOADING INDICATOR - AGREGAR ESTO -->
+                    <StackLayout x:Name="LoadingIndicator"
+                                 IsVisible="False"
+                                 HorizontalOptions="Center" 
+                                 Spacing="10"
+                                 Orientation="Horizontal">
+                        <ActivityIndicator IsRunning="True" 
+                                           Color="#4ADE80" 
+                                           WidthRequest="25"
+                                           HeightRequest="25" />
+                        <Label Text="🔍 Identificando planta..."
+                               TextColor="#4ADE80"
+                               VerticalOptions="Center"
+                               FontSize="14" />
+                    </StackLayout>
+
                 </VerticalStackLayout>
             </Border>
 
+            <!-- Resto de secciones igual... -->
             <!--Seccion "Mi Jardin"-->
             <Border StrokeShape="RoundRectangle 15"
                     BackgroundColor="#162032"
@@ -145,7 +168,7 @@
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>
-            
+
             <!--TIPS DE CUIDADO-->
             <Border StrokeShape="RoundRectangle 15"
                     BackgroundColor="#162032"
@@ -161,8 +184,6 @@
                 </VerticalStackLayout>
             </Border>
 
-
         </StackLayout>
-
     </ScrollView>
 </ContentPage>
