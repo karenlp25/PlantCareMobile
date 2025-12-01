@@ -46,9 +46,14 @@ public partial class HomePage : ContentPage
             await DisplayAlert("Error", $"Error: {ex.Message}", "OK");
         }
     }
+
+    private async void HelpUploadAreaTapped(object sender, EventArgs e)
+    {
+        await DisplayAlert("HELP", "VEN Y SANA MI DOLOOOOOOOOR, TU TIENES LA CURA DE ESTE AMOOO-OOOHR", "Pero que buena rola");
+    }
     #endregion
 
-    #region Photo Methods
+        #region Photo Methods
     private async Task OnTakePhotoClicked()
     {
         try

@@ -1,5 +1,4 @@
-﻿using PlantCareMobile.Views;
-namespace PlantCareMobile
+﻿namespace PlantCareMobile
 {
     public partial class App : Application
     {

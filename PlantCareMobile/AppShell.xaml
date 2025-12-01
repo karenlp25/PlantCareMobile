@@ -41,7 +41,7 @@
     </FlyoutItem>
 
     <FlyoutItem Title="Perfil"
-                Icon="user_icon.png">
+                Icon="profile_icon.png">
         <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" />
     </FlyoutItem>
 
@@ -51,7 +51,7 @@
     </FlyoutItem>
     
     <FlyoutItem Title="Recordatorios"
-                Icon="bell_icon.png">
+                Icon="reminder_icon.png">
         <ShellContent ContentTemplate="{DataTemplate views:RemindersPage}" />
     </FlyoutItem>
 
@@ -62,28 +62,30 @@
               IsEnabled="False" />
 
     <FlyoutItem Title="Configuración"
-                Icon="settings_icon.png">
+                Icon="setting_icon.png">
         <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
     </FlyoutItem>
 
     <FlyoutItem Title="Ayuda"
-                Icon="help_icon.png">
+                Icon="helpalt_icon.png">
         <ShellContent ContentTemplate="{DataTemplate views:HelpPage}" />
     </FlyoutItem>
     <FlyoutItem Title="Acerca de"
-                Icon="help_icon.png">
+                Icon="about_icon.png">
         <ShellContent ContentTemplate="{DataTemplate views:AboutPage}" />
     </FlyoutItem>
 
     <Shell.FlyoutFooter>
         <StackLayout Padding="20"
                      VerticalOptions="End">
-            <Button Text="Cerrar Sesión"
+            <Button x:Name="logoutButton" 
+                Text="Cerrar Sesión"
                     BackgroundColor="#A82B2B"
                     TextColor="White"
                     CornerRadius="10"
                     HeightRequest="50"
-                    ImageSource="logout_icon.png" />
+                    ImageSource="logout_icon.png"
+                    Clicked="logoutButton_Clicked"/>
         </StackLayout>
     </Shell.FlyoutFooter>
 

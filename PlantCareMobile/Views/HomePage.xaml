@@ -23,7 +23,7 @@
                                   FontFamily="RobotoVar"
                                   FontAttributes="Bold"
                                   FontSize="28" />
-                            <Span Text=" 🗣️🔥"
+                            <Span Text=" 🌱"
                                   FontFamily="RobotoVar"
                                   FontAttributes="Bold"
                                   FontSize="28" />
@@ -33,7 +33,8 @@
                 <Label Text="Bienvenido a tu jardin digital"
                        FontFamily="RobotoVar"
                        FontAttributes="Bold"
-                       FontSize="28" />
+                       TextColor="#99A1AF"
+                       FontSize="14" />
             </VerticalStackLayout>
 
             <!--Seccion para identificar planta-->
@@ -48,11 +49,21 @@
                                FontAttributes="Bold"
                                FontSize="18"
                                VerticalOptions="Center" />
+                        <Border Grid.Column="2"
+                                HeightRequest="35"
+                                WidthRequest="35"
+                                StrokeShape="Ellipse"
+                                StrokeThickness="0"
+                                BackgroundColor="#0D542B">
+                            <Image Source="help_icon.png"
+                                   WidthRequest="25"
+                                   HeightRequest="25"/>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="HelpUploadAreaTapped"/>
+                            </Border.GestureRecognizers>
 
-                        <ImageButton Grid.Column="2"
-                                     Source="help_icon.png"
-                                     HeightRequest="25"
-                                     WidthRequest="25" />
+                        </Border>
+                       
                     </Grid>
 
                     <Label Text="Sube una foto para identificar cualquier planta y agregarla a tu colección"

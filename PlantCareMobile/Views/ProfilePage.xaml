@@ -80,7 +80,7 @@
                                     HeightRequest="55"
                                     WidthRequest="55"
                                     VerticalOptions="Center">
-                                <Image Source="greenleaf_plantcare.png"
+                                <Image Source="plantcount_icon.png"
                                        Aspect="AspectFit"
                                        HeightRequest="30"
                                        WidthRequest="30"
@@ -121,7 +121,7 @@
                                     HeightRequest="55"
                                     WidthRequest="55"
                                     VerticalOptions="Center">
-                                <Image Source="greenleaf_plantcare.png"
+                                <Image Source="remindercount_icon.png"
                                        Aspect="AspectFit"
                                        HeightRequest="30"
                                        WidthRequest="30"
@@ -132,7 +132,7 @@
                             <VerticalStackLayout Grid.Column="1"
                                                  VerticalOptions="Center"
                                                  Spacing="2">
-                                <Label Text="Plantas"
+                                <Label Text="Recordatorios"
                                        TextColor="#9CA3AF"
                                        FontSize="14"
                                        FontFamily="RobotoVar" />
@@ -160,7 +160,7 @@
                                     HeightRequest="55"
                                     WidthRequest="55"
                                     VerticalOptions="Center">
-                                <Image Source="greenleaf_plantcare.png"
+                                <Image Source="membersince_icon.png"
                                        Aspect="AspectFit"
                                        HeightRequest="30"
                                        WidthRequest="30"
@@ -171,7 +171,7 @@
                             <VerticalStackLayout Grid.Column="1"
                                                  VerticalOptions="Center"
                                                  Spacing="2">
-                                <Label Text="Plantas"
+                                <Label Text="Miembro desde"
                                        TextColor="#9CA3AF"
                                        FontSize="14"
                                        FontFamily="RobotoVar" />
@@ -199,7 +199,7 @@
                                     HeightRequest="55"
                                     WidthRequest="55"
                                     VerticalOptions="Center">
-                                <Image Source="greenleaf_plantcare.png"
+                                <Image Source="lastaccess_icon.png"
                                        Aspect="AspectFit"
                                        HeightRequest="30"
                                        WidthRequest="30"
@@ -210,7 +210,7 @@
                             <VerticalStackLayout Grid.Column="1"
                                                  VerticalOptions="Center"
                                                  Spacing="2">
-                                <Label Text="Plantas"
+                                <Label Text="Ultimo acceso"
                                        TextColor="#9CA3AF"
                                        FontSize="14"
                                        FontFamily="RobotoVar" />
