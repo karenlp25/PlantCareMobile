@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PlantCareMobile.Views.HomePage"
+             xmlns:models="clr-namespace:PlantCareMobile.Models"
              Title="Panel de Inicio"
              Shell.ForegroundColor="#05DF73"
              Shell.BackgroundColor="#101928"
@@ -134,6 +135,7 @@
                     StrokeThickness="0"
                     Padding="20">
                 <VerticalStackLayout Spacing="15">
+                    
                     <Grid ColumnDefinitions="*,Auto">
                         <Label Text="Mi Jardín"
                                TextColor="White"
@@ -151,10 +153,44 @@
                         </Label>
                     </Grid>
 
-                    <Label Text="Tus plantas aparecerán aquí..."
+                    <CollectionView ItemsSource="{Binding RecentPlants}"
+                                    HeightRequest="160"
+                                    IsVisible="{Binding HasPlants}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="15"/>
+                        </CollectionView.ItemsLayout>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:SavedPlant">
+                                <Border StrokeShape="RoundRectangle 10"
+                                        StrokeThickness="0"
+                                        BackgroundColor="#1E293B"
+                                        HeightRequest="150"
+                                        WidthRequest="120">
+                                    <Grid RowDefinitions="*, Auto">
+                                        <Image Grid.Row="0"
+                                               Source="{Binding ImagePath}"
+                                               Aspect="AspectFill"
+                                               HeightRequest="110"/>
+                                        
+                                        <Label Grid.Row="1"
+                                               Text="{Binding DisplayName}"
+                                               TextColor="White"
+                                               FontSize="12"
+                                               LineBreakMode="TailTruncation"
+                                               HorizontalOptions="Center"
+                                               Padding="5"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Label Text="Tus plantas recientes aparecerán aquí..."
                            TextColor="#9CA3AF"
                            HorizontalOptions="Center"
-                           Padding="20" />
+                           Padding="20"
+                           IsVisible="{Binding HasPlants, Converter={StaticResource InvertedBoolConverter}}"/>
                 </VerticalStackLayout>
             </Border>
 

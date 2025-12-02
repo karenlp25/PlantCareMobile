@@ -1,5 +1,6 @@
 ﻿using PlantCareMobile.Models;
 using PlantCareMobile.Services;
+using PlantCareMobile.ViewModels; // <--- Agrega este using
 
 namespace PlantCareMobile.Views;
 
@@ -9,12 +10,18 @@ public partial class HomePage : ContentPage
     private FileResult? selectedImage;
     private List<PlantResult>? identificationResults;
     private readonly PlantIdentificationService plantService;
+    private readonly HomeViewModel _viewModel; // <--- Nueva variable para el ViewModel
     #endregion
 
     #region Constructor
-    public HomePage()
+    // Modificamos el constructor para recibir el ViewModel (Inyección)
+    public HomePage(HomeViewModel viewModel) 
     {
         InitializeComponent();
+        
+        _viewModel = viewModel;
+        BindingContext = _viewModel; // <--- Conectamos los datos
+
         plantService = new PlantIdentificationService();
     }
     #endregion
@@ -183,26 +190,34 @@ public partial class HomePage : ContentPage
         return message;
     }
 
-    private async Task SavePlant(PlantResult plant)
+   private async Task SavePlant(PlantResult plant)
     {
         if (selectedImage == null || plant?.Species == null) return;
 
         try
         {
-            // Mostrar diálogo para ingresar ubicación
+            // 1. Pedir Ubicación (Como ya tenías)
             string location = await DisplayPromptAsync("Ubicación",
                 "¿Dónde está ubicada esta planta?",
-                "Guardar",
+                "Siguiente", 
                 "Cancelar",
                 "Ej: Jardín, Sala, Balcón",
                 maxLength: 100);
 
-            if (location == null) return; // Usuario canceló
+            if (location == null) return; // Si cancela, no guarda nada
+
+            // 2. NUEVO: Pedir Apodo (Esto es lo que te faltaba)
+            string nickname = await DisplayPromptAsync("Ponle un nombre",
+                $"El nombre científico es {plant.Species.ScientificNameWithoutAuthor}.\n¿Quieres ponerle un apodo?",
+                "Guardar",
+                "Usar nombre científico",
+                "Ej: Sr. Girasol",
+                maxLength: 50);
 
             // Guardar imagen en almacenamiento local
             var imagePath = await SaveImageToLocalStorage(selectedImage);
 
-            // Crear objeto SavedPlant
+            // Crear objeto SavedPlant con el Nickname
             var savedPlant = new SavedPlant
             {
                 ScientificName = plant.Species.ScientificNameWithoutAuthor ?? "Desconocido",
@@ -210,20 +225,23 @@ public partial class HomePage : ContentPage
                     ? string.Join(", ", plant.Species.CommonNames)
                     : "N/A",
                 Location = location,
+                Nickname = nickname ?? "", // <--- Aquí guardamos el apodo
                 ImagePath = imagePath,
                 Score = plant.Score,
                 DateAdded = DateTime.Now
             };
 
             // Guardar en base de datos
-            var dbService = new PlantDatabaseService();
+            // Nota: Aquí creamos una instancia nueva del servicio si no lo inyectaste, para asegurar que funcione rápido.
+            var dbService = new PlantDatabaseService(); 
             await dbService.SavePlantAsync(savedPlant);
 
-            // 🔥 ENVIAR NOTIFICACIÓN DE QUE SE GUARDÓ UNA PLANTA
+            // Notificar a toda la app que hay planta nueva
             PlantMessenger.Send("PlantSaved", savedPlant);
 
+            // Mensaje de éxito usando el nombre bonito
             await DisplayAlert("✅ Éxito",
-                $"'{savedPlant.ScientificName}' guardada en tu jardín",
+                $"¡Bienvenido/a {savedPlant.DisplayName} a tu jardín!",
                 "OK");
         }
         catch (Exception ex)

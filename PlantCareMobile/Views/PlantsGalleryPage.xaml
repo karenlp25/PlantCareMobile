@@ -2,153 +2,217 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:PlantCareMobile.ViewModels"
+             xmlns:models="clr-namespace:PlantCareMobile.Models"
              x:Class="PlantCareMobile.Views.PlantsGalleryPage"
              Title="Mis Plantas"
-             Shell.BackgroundColor="#101928">
+             Shell.BackgroundColor="#101928"
+             BackgroundColor="#101928">
 
-    <ContentPage.BindingContext>
-        <viewmodels:PlantsGalleryViewModel />
-    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="SensorLabel" TargetType="Label">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,*" Padding="20">
         
-        <!-- Header -->
-        <StackLayout Grid.Row="0" Spacing="10" Margin="0,0,0,20">
-            <Label Text="🌿 Mis Plantas"
-                   FontSize="32"
-                   FontAttributes="Bold"
-                   TextColor="#05DF73"
-                   HorizontalOptions="Start" />
-            
-            <Label Text="Tus plantas guardadas"
-                   FontSize="16"
-                   TextColor="#B0B0B0"
-                   HorizontalOptions="Start" />
+        <StackLayout Grid.Row="0" Spacing="5" Margin="0,0,0,10">
+            <Grid ColumnDefinitions="*, Auto">
+                <VerticalStackLayout Grid.Column="0">
+                    <Label Text="🌿 Mis Plantas"
+                           FontSize="32"
+                           FontAttributes="Bold"
+                           TextColor="#05DF73" />
+                    <Label Text="Desliza para ver tu colección"
+                           FontSize="16"
+                           TextColor="#B0B0B0" />
+                </VerticalStackLayout>
+                
+                <ImageButton Grid.Column="1"
+                             BackgroundColor="Transparent"
+                             HeightRequest="40"
+                             WidthRequest="40"
+                             VerticalOptions="Center"
+                             Command="{Binding RefreshSensorsCommand}">
+                    <ImageButton.Source>
+                        <FontImageSource Glyph="🔄" Color="#05DF73" Size="30"/>
+                    </ImageButton.Source>
+                </ImageButton>
+            </Grid>
         </StackLayout>
 
-        <!-- Loading Indicator -->
         <ActivityIndicator Grid.Row="1"
-                          IsRunning="{Binding IsLoading}"
-                          IsVisible="{Binding IsLoading}"
-                          Color="#05DF73"
-                          VerticalOptions="Center"
-                          HorizontalOptions="Center" />
+                           IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           Color="#05DF73"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"
+                           ZIndex="99"/>
 
-        <!-- Empty State -->
         <StackLayout Grid.Row="1"
-                    IsVisible="{Binding HasPlants, Converter={StaticResource InvertedBoolConverter}}"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center"
-                    Spacing="20">
-            <Label Text="🌱"
-                   FontSize="80"
-                   HorizontalOptions="Center" />
+                     IsVisible="{Binding HasPlants, Converter={StaticResource InvertedBoolConverter}}"
+                     VerticalOptions="Center"
+                     HorizontalOptions="Center"
+                     Spacing="20">
+            <Label Text="🌱" FontSize="80" HorizontalOptions="Center" />
             <Label Text="No tienes plantas guardadas"
-                   FontSize="20"
-                   FontAttributes="Bold"
-                   TextColor="White"
-                   HorizontalOptions="Center" />
+                   FontSize="20" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" />
             <Label Text="Identifica plantas desde el inicio para comenzar tu colección"
-                   FontSize="14"
-                   TextColor="#B0B0B0"
-                   HorizontalOptions="Center"
-                   HorizontalTextAlignment="Center"
-                   MaximumWidthRequest="300" />
+                   FontSize="14" TextColor="#B0B0B0" HorizontalOptions="Center" 
+                   HorizontalTextAlignment="Center" MaximumWidthRequest="300" />
         </StackLayout>
 
-        <!-- Carousel View -->
         <CarouselView Grid.Row="1"
-                     ItemsSource="{Binding Plants}"
-                     IsVisible="{Binding HasPlants}"
-                     PeekAreaInsets="50"
-                     VerticalOptions="Center">
+                      ItemsSource="{Binding Plants}"
+                      IsVisible="{Binding HasPlants}"
+                      PeekAreaInsets="20"
+                      Loop="False"
+                      VerticalOptions="Center">
             
             <CarouselView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="models:SavedPlant">
                     <Border BackgroundColor="#1E293B"
                             StrokeThickness="0"
                             Margin="10"
-                            HeightRequest="500">
+                            HeightRequest="650">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="20"/>
                         </Border.StrokeShape>
                         
                         <Grid RowDefinitions="300,*">
                             
-                            <!-- Imagen de la Planta -->
-                            <Border Grid.Row="0"
-                                   BackgroundColor="#2D3748"
-                                   StrokeThickness="0">
+                            <Border Grid.Row="0" BackgroundColor="#2D3748" StrokeThickness="0">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="20,20,0,0"/>
                                 </Border.StrokeShape>
                                 <Image Source="{Binding ImagePath}"
-                                      Aspect="AspectFill"
-                                      HeightRequest="300" />
+                                       Aspect="AspectFill"
+                                       HeightRequest="300" />
                             </Border>
 
-                            <!-- Información de la Planta -->
-                            <StackLayout Grid.Row="1"
-                                       Padding="20"
-                                       Spacing="15">
-                                
-                                <!-- Nombre Científico -->
-                                <Label Text="{Binding ScientificName}"
-                                      FontSize="24"
-                                      FontAttributes="Bold"
-                                      TextColor="#05DF73"
-                                      LineBreakMode="WordWrap"
-                                      MaxLines="2" />
+                            <ScrollView Grid.Row="1">
+                                <VerticalStackLayout Padding="20" Spacing="10">
+                                    
+                                    <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                                        <Label Grid.Column="0" 
+                                            Text="{Binding DisplayName}"
+                                            FontSize="28"
+                                            FontAttributes="Bold"
+                                            TextColor="#05DF73"
+                                            LineBreakMode="WordWrap"
+                                            VerticalOptions="Center">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlantsGalleryViewModel}}, Path=EditNameCommand}"
+                                                                      CommandParameter="{Binding .}"/>
+                                            </Label.GestureRecognizers>
+                                        </Label>
 
-                                <!-- Nombres Comunes -->
-                                <StackLayout Spacing="5">
-                                    <Label Text="Nombres comunes:"
-                                          FontSize="14"
-                                          TextColor="#B0B0B0" />
+                                        <Button Grid.Column="1"
+                                                Text="✏️"
+                                                BackgroundColor="Transparent"
+                                                TextColor="White"
+                                                FontSize="20"
+                                                Padding="0"
+                                                HeightRequest="40"
+                                                WidthRequest="40"
+                                                VerticalOptions="Center"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlantsGalleryViewModel}}, Path=EditNameCommand}"
+                                                CommandParameter="{Binding .}"/>
+                                    </Grid>
+
+                                    <Label Text="{Binding ScientificName}"
+                                           FontSize="14"
+                                           FontAttributes="Italic"
+                                           TextColor="#9CA3AF"
+                                           Margin="0,-5,0,5"
+                                           IsVisible="{Binding Nickname, Converter={StaticResource StringNotEmptyConverter}}" />
+
                                     <Label Text="{Binding CommonNames}"
-                                          FontSize="16"
-                                          TextColor="White"
-                                          LineBreakMode="WordWrap"
-                                          MaxLines="2" />
-                                </StackLayout>
+                                           FontSize="16"
+                                           TextColor="White"
+                                           LineBreakMode="WordWrap" />
 
-                                <!-- Ubicación -->
-                                <StackLayout Spacing="5" IsVisible="{Binding Location, Converter={StaticResource StringNotEmptyConverter}}">
-                                    <Label Text="📍 Ubicación:"
-                                          FontSize="14"
-                                          TextColor="#B0B0B0" />
-                                    <Label Text="{Binding Location}"
-                                          FontSize="16"
-                                          TextColor="White"
-                                          LineBreakMode="WordWrap"
-                                          MaxLines="2" />
-                                </StackLayout>
+                                    <Border Stroke="#05DF73"
+                                            StrokeThickness="1"
+                                            BackgroundColor="#101928"
+                                            Padding="10"
+                                            Margin="0,5">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10"/>
+                                        </Border.StrokeShape>
+                                        
+                                        <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+                                            <Label Grid.Row="0" Grid.Column="0" Text="Estado del Sensor:" TextColor="#A0A3BD" FontSize="12"/>
 
-                                <!-- Fecha Agregada -->
-                                <Label Text="{Binding DateAdded, StringFormat='Agregada: {0:dd/MM/yyyy}'}"
-                                      FontSize="12"
-                                      TextColor="#64748B"
-                                      HorizontalOptions="Start" />
+                                            <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Spacing="15" VerticalOptions="Center">
+                                                <Label Text="{Binding LiveTemp, StringFormat='🌡 {0}'}" Style="{StaticResource SensorLabel}"/>
+                                                <Label Text="{Binding LiveHumidity, StringFormat='💧 {0}'}" Style="{StaticResource SensorLabel}"/>
+                                            </HorizontalStackLayout>
 
-                                <!-- Botón Eliminar -->
-                                <Button Text="🗑️ Eliminar"
-                                       Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlantsGalleryViewModel}}, Path=DeletePlantCommand}"
-                                       CommandParameter="{Binding .}"
-                                       BackgroundColor="#A82B2B"
-                                       TextColor="White"
-                                       CornerRadius="10"
-                                       HeightRequest="45"
-                                       Margin="0,10,0,0" />
-                            </StackLayout>
+                                            <HorizontalStackLayout Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                                                
+                                                <Button Text="✏️"
+                                                        FontSize="12"
+                                                        HeightRequest="35"
+                                                        WidthRequest="35"
+                                                        Padding="0"
+                                                        CornerRadius="8"
+                                                        BackgroundColor="#2D3748"
+                                                        TextColor="White"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlantsGalleryViewModel}}, Path=RenameSensorCommand}"
+                                                        CommandParameter="{Binding .}"
+                                                        IsVisible="{Binding SensorId, Converter={StaticResource StringNotEmptyConverter}}"/>
+
+                                                <Button Text="🔗 Vincular" 
+                                                        FontSize="11"
+                                                        HeightRequest="35"
+                                                        Padding="10,0"
+                                                        CornerRadius="8"
+                                                        BackgroundColor="#05DF73"
+                                                        TextColor="#101928"
+                                                        FontAttributes="Bold"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlantsGalleryViewModel}}, Path=AddSensorCommand}"
+                                                        CommandParameter="{Binding .}">
+                                                     <Button.Triggers>
+                                                        <DataTrigger TargetType="Button" Binding="{Binding SensorId, Converter={StaticResource StringNotEmptyConverter}}" Value="True">
+                                                            <Setter Property="Text" Value="🔗 Cambiar"/>
+                                                            <Setter Property="BackgroundColor" Value="#252A3B"/>
+                                                            <Setter Property="TextColor" Value="#05DF73"/>
+                                                            <Setter Property="BorderColor" Value="#05DF73"/>
+                                                            <Setter Property="BorderWidth" Value="1"/>
+                                                        </DataTrigger>
+                                                    </Button.Triggers>
+                                                </Button>
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                    <HorizontalStackLayout Spacing="5" IsVisible="{Binding Location, Converter={StaticResource StringNotEmptyConverter}}">
+                                        <Label Text="📍" TextColor="#B0B0B0" />
+                                        <Label Text="{Binding Location}" TextColor="White" />
+                                    </HorizontalStackLayout>
+
+                                    <Label Text="{Binding DateAdded, StringFormat='Agregada: {0:dd/MM/yyyy}'}"
+                                           FontSize="12"
+                                           TextColor="#64748B" />
+
+                                    <Button Text="🗑️ Eliminar Planta"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlantsGalleryViewModel}}, Path=DeletePlantCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#332B2B"
+                                            TextColor="#FF6B6B"
+                                            CornerRadius="10"
+                                            HeightRequest="40"
+                                            Margin="0,10,0,0" />
+                                </VerticalStackLayout>
+                            </ScrollView>
                         </Grid>
                     </Border>
                 </DataTemplate>
             </CarouselView.ItemTemplate>
-            
-            <CarouselView.ItemsLayout>
-                <LinearItemsLayout Orientation="Horizontal"
-                                  ItemSpacing="10" />
-            </CarouselView.ItemsLayout>
         </CarouselView>
     </Grid>
 </ContentPage>

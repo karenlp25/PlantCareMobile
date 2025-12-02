@@ -1,5 +1,8 @@
 ﻿using CommunityToolkit.Maui.Core;
 using Microsoft.Extensions.Logging;
+using PlantCareMobile.Services;
+using PlantCareMobile.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PlantCareMobile
 {
@@ -18,6 +21,24 @@ namespace PlantCareMobile
                     fonts.AddFont("Roboto-VariableFont_wdth_wght.ttf", "RobotoVar");
 
                 });
+            
+            // --- CONFIGURACIÓN DE LA API ---
+            
+            // Ya no necesitamos la lógica de localhost/10.0.2.2 porque usaremos el servidor externo
+            
+            builder.Services.AddHttpClient<ApiService>(client =>
+            {
+                // URL Real del servidor de desarrollo proporcionada por tu compañero
+                client.BaseAddress = new Uri("http://vm.drcvault.dev/");
+                client.Timeout = TimeSpan.FromSeconds(30);
+            });
+
+            // --- REGISTRO DE SERVICIOS ---
+            builder.Services.AddSingleton<PlantDatabaseService>(); // Tu servicio de base de datos local
+            builder.Services.AddTransient<PlantsGalleryViewModel>(); // Tu ViewModel existente
+            builder.Services.AddTransient<Views.PlantsGalleryPage>(); // Tu página existente
+            builder.Services.AddTransient<ViewModels.HomeViewModel>();
+            builder.Services.AddTransient<Views.HomePage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
